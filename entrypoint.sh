@@ -12,6 +12,28 @@ debug_message() {
     echo -e "\033[35m\tINFO\t[GZ-CLASSIC]\tDEBUG_MODE IS SET. NOTHING WILL RUN"
 }
 
+if [ "x${SITL_TYPE}" != "xgazebo-classic" ]; then
+    echo -e "\033[31m\tINFO\t[GZ-CLASSIC]\tINVALID SITL_TYPE."
+    echo -e "\033[31m\tINFO\t[GZ-CLASSIC]\tSITL_TYPE FOR THIS CONTAINER MUST BE \033[32m\"gazebo-classic\"."
+    exit 1
+fi
+
+if [ -z "${ROS_DOMAIN_ID}" ]; then
+    ROS_DOMAIN_ID=0
+fi
+
+if [ -z "${HEADLESS}" ]; then
+    HEADLESS=0
+fi
+
+if [ -z "${DEBUG_MODE}" ]; then
+    DEBUG_MODE=0
+fi
+
+if [ -z "${EXPORT_ENV}" ]; then
+    EXPORT_ENV=1
+fi
+
 # EXPORT ENVIRONMENT VARIABLES
 PX4_SOURCE_DIR=/home/user/PX4-Autopilot
 PX4_SIM_DIR=/home/user/PX4-Autopilot/Tools/simulation
@@ -62,8 +84,9 @@ if [ "${DEBUG_MODE}" -eq "1" ]; then
 
 
         #- WTIE VARIABLED TO BE EXPORTED TO THE TEMPFILE
-        echo "DEBUG_MODE=0" >> /tmp/envvar
+        echo "HEADLESS=${HEADLESS}" >> /tmp/envvar
         echo "GZ_SIM_RESOURCE_PATH=${GZ_SIM_RESOURCE_PATH}" >> /tmp/envvar
+        echo "ROS_DOMAIN_ID=${ROS_DOMAIN_ID}" >> /tmp/envvar
 
         #- ADD VARIABLES TO BE EXPORTED TO SHELL RC
         for value in $(cat /tmp/envvar)
@@ -112,11 +135,6 @@ else
         ${SITL_WORLD} \
         ${PX4_SOURCE_DIR} \
         ${PX4_BUILD_DIR} > ${HOME}/log/gazeboRun
-
-        while ! [[ $(cat "${HOME}/log/gazeboRun") == *"Publicized address"* ]]; do
-            echo -e "\033[31mINFO\t[GZ-CLASSIC]\tWAITING FOR GAZEBO TO STARTUP..."
-            sleep 1
-        done
 
     if [ ! -z ${AIRSIM_IP} ]; then
         echo -e "\033[32mINFO\t[GZ-CLASSIC]\tAIRSIM_IP SET. STARTING AIRSIM BRIDGE..."
