@@ -1,16 +1,17 @@
-# CONTAINERIZED GAZEBO CLASSIC CONTAINER FOR PX4 SITL
+# CONTAINERIZED GAZEBO CLASSIC FOR PX4 SITL
 
 ## 0. OVERVIEW
 
-- This repository contains resources for building Gazebo Container for running PX4-Autopilot SITL
-- Gazebo-Classic does not support recent versions of Ubuntu newer than 20.04 Focal Forsa.
-- Application packed as a docker container can help overcome this issue.
-- Container built from this repository also contains [GazeboDrone](https://microsoft.github.io/AirSim/gazebo_drone/) for integrating AirSim Simulation.
-- Prebuilt image is available on [docker hub](https://hub.docker.com/r/kestr3l/gazebo).
+- This repository contains resources for building a Gazebo container for running PX4 Autopilot SITL.
+- Gazebo Classic does not support recent versions of Ubuntu newer than 20.04 Focal Fossa.
+- Applications packed as Docker containers can help overcome this issue.
+- The container built from this repository also contains [GazeboDrone](https://microsoft.github.io/AirSim/gazebo_drone/) for integrating AirSim Simulation.
+- A prebuilt image is available on [Docker Hub](https://hub.docker.com/r/kestr3l/gazebo).
 
-## 1. AVAIABLE TAGS & BUILD ORDERS
 
-### 1.1. TAG NAMEING RULES
+## 1. AVAILABLE TAGS & BUILD ORDERS
+
+### 1.1. TAG NAMING RULES
 
 |TAG|DESCRIPTION|Example|Misc.|
 |:-|:-|:-|:-|
@@ -20,7 +21,7 @@
 
 |TAG|ARCH|AVAILABILITY|Misc.|
 |:-|:-|:-:|:-|
-|`harmonic`|AMD64|✅|Build resource managed by:<br/>[kestr3l/Gazebo-PC4-Container](https://github.com/kestr31/Gazebo-PX4-Container)|
+|`harmonic`|AMD64|✅|Build resource managed by:<br/>[kestr3l/Gazebo-PX4-Container](https://github.com/kestr31/Gazebo-PX4-Container)|
 |`classic-11`|AMD64|✅|-|
 
 ### 1.3. BUILD ORDERS
@@ -80,9 +81,9 @@ DOCKER_BUILDKIT=1 docker build --no-cache \
 
 ### 4.1. RUN BY `docker compose` COMMAND
 
-- Since there are many modular containers required to run PX4 SITL, deployment by `docker compose` is recommended.
-- Configuration of `docker-compose.yml` will vary based on user's need.
-- On this document, snippet for adding Gazebo-Classic deployment on `docker-compse.yml` is suggested.
+- Since there are many modular containers required to run PX4 SITL, deployment using `docker-compose` is recommended.
+- The configuration of `docker-compose.yml` will vary based on the user's needs.
+- In this document, a snippet for adding a Gazebo-Classic deployment to `docker-compose.yml` is suggested:
 
 ```yaml
   sim:
@@ -100,7 +101,6 @@ DOCKER_BUILDKIT=1 docker build --no-cache \
       HEADLESS:                   0
       DEBUG_MODE:                 0
       EXPORT_ENV:                 1
-      # -------------------------------------------------
     volumes:
       - /tmp/.X11-unix
     devices:
@@ -120,8 +120,8 @@ DOCKER_BUILDKIT=1 docker build --no-cache \
 
 ### 4.2. RUN BY `docker run` COMMAND (NOT RECOMMENDED)
 
-> This container is designed to be deployed with other SITL components simulataneously using `docker compose` command.
-> Running it by `docker run` command is only recommended for unit test or debugging purpose.
+> This container is designed to be deployed simultaneously with other SITL components using the `docker-compose` command.
+> Running it with the `docker run` command is only recommended for unit testing or debugging purposes.
 
 ```shell
 docker run -it --rm --gpus --all \
