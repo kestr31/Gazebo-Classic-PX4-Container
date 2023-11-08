@@ -145,10 +145,15 @@ RUN \
     mkdir /home/user/scripts \
     && sudo ln -s /usr/local/bin/entrypoint.sh /home/user/scripts/entrypoint.sh
 
+# AirSim GazeboDrone Binary For Updating States to AirSim Simulation
+COPY --chown=user:user --from=kestr3l/airsim:1.8.1-dev-gzdrone \
+    /home/ue4/AirSim/GazeboDrone/build/GazeboDrone \
+    /home/user/scripts/AirSimBridge
+
 CMD [ "/usr/local/bin/entrypoint.sh" ]
 
 # ------- BUILD COMMAND ------
-# DOCKER_BUILDKIT=1 docker build --no-cache \
+# DOCKER_BUILDKIT=1 docker build \
 # --build-arg BASEIMAGE=ubuntu \
 # --build-arg BASETAG=20.04 \
 # -t kestr3l/gazebo:classic-11 \
